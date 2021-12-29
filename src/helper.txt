@@ -1,0 +1,6 @@
+E-commerce Store
+
+Get data from fakeStore Api and upload it to firestore
+Display data
+Add authentication to site
+User should be able to: register/log in/log out, select categories,search for items, add items to cart, remove items from cart, proceed to payment

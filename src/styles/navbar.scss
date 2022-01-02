@@ -1,0 +1,29 @@
+.navbar {
+  height: 4.375rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.55rem;
+
+  .logo-container {
+    height: 100%;
+    width: 4.375rem;
+    .logo {
+      height: 4rem;
+      width: 4rem;
+    }
+  }
+
+  .list {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .list-item {
+      padding: 0.625rem 1rem;
+      text-transform: uppercase;
+    }
+  }
+}

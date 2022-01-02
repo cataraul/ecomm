@@ -1,22 +1,23 @@
 import React from "react";
-import NavbarForm from "./NavbarForm";
-import styled from "styled-components";
-
+import { Link } from "react-router-dom";
+import "../styles/navbar.scss";
+import { ReactComponent as Logo } from "../assets/Lotus-Flower.svg";
 const Navbar = () => {
   return (
-    <NavBar>
-      <div className="logo">
-        <p>BlackBelt Store</p>
+    <div className="navbar">
+      <Link to="/" className="logo-container">
+        <Logo className="logo" />
+      </Link>
+      <div className="list">
+        <Link className="list-item" to="/shop">
+          Shop
+        </Link>
+        <Link className="list-item" to="/shop">
+          Contact
+        </Link>
       </div>
-      <NavbarForm />
-    </NavBar>
+    </div>
   );
 };
 
 export default Navbar;
-
-const NavBar = styled.nav`
-  width: 100%;
-  min-height: 8vh;
-  background-color: rgba(20, 26, 34, 255);
-`;

@@ -1,7 +1,7 @@
 import React from "react";
+import ButtonComponent from "../Button/Button";
 
 const CollectionItem = ({ item }) => {
-  console.log(item.imageUrl);
   return (
     <div className="collection-item">
       <div
@@ -10,8 +10,9 @@ const CollectionItem = ({ item }) => {
       />
       <div className="collection-footer">
         <span className="name">{item.name}</span>
-        <span className="price">{item.price}</span>
+        <span className="price">{item.price} $</span>
       </div>
+      <ButtonComponent>Add to Cart</ButtonComponent>
     </div>
   );
 };

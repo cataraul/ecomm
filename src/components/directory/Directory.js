@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/directory.scss";
 import MenuItem from "../menu-item/MenuItem";
+import { Link } from "react-router-dom";
 
 const Directory = () => {
   const [sections, setSections] = useState([

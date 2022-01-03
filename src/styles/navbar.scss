@@ -25,5 +25,15 @@
       padding: 0.625rem 1rem;
       text-transform: uppercase;
     }
+    .show-cart-items {
+      background: none;
+      border: none;
+      &:hover {
+        cursor: pointer;
+      }
+      &:active {
+        outline: none;
+      }
+    }
   }
 }

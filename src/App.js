@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Homepage from "./pages/Homepage";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import SignIn from "./pages/SignIn";
@@ -27,6 +28,7 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       <ToastContainer />
     </>

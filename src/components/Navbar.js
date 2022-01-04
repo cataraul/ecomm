@@ -16,19 +16,18 @@ const Navbar = () => {
         <Link className="list-item" to="/shop">
           Shop
         </Link>
-        <Link className="list-item" to="/shop">
-          Contact
-        </Link>
         <Link className="list-item" to="/profile">
           Profile
         </Link>
-        <button
-          className="show-cart-items"
-          onClick={() => setCartVisibility((prevState) => !prevState)}
-        >
-          <FontAwesomeIcon icon={faShoppingCart}></FontAwesomeIcon>
+        <div>
+          <button
+            className="show-cart-items"
+            onClick={() => setCartVisibility((prevState) => !prevState)}
+          >
+            <FontAwesomeIcon icon={faShoppingCart}></FontAwesomeIcon>
+          </button>
           {cartVisibility ? <CartProducts /> : <></>}
-        </button>
+        </div>
       </div>
     </div>
   );

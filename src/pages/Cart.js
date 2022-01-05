@@ -1,4 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { db } from "../firebase.config";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  increment,
+  collection,
+} from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import CartContext from "../context/cart/CartContext";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -12,13 +22,56 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Cart = () => {
-  const { cartItems } = useContext(CartContext);
-  const [cartItemsCopy, setCartItemsCopy] = useState({ ...cartItems });
-  const incrementQuantity = (item) => {
-    if (cartItems.includes(item)) {
-      return;
+  // const { cartItems } = useContext(CartContext);
+  const [cartItemsCopy, setCartItemsCopy] = useState({});
+  const [cartItems, setCartItems] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [quantity, setQuantity] = useState({});
+  //CHECK IF USER IS LOGGED IN, IF IT IS AND IT HAS ITEMS IN THE CART, DISPLAY THEM
+
+  const auth = getAuth();
+  useEffect(() => {
+    checkUser();
+  }, []);
+  const checkUser = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        getData();
+      } else {
+      }
+    });
+  };
+  const getData = async () => {
+    const docRef = doc(db, "users", `${auth.currentUser.uid}`);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setCartItems([...docSnap.data().cartItems]);
     } else {
-      console.log("it is not");
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
+
+  //CHANGE ITEMS QUANTITY
+
+  const changeQuantity = async (type, item) => {
+    const docRef = doc(db, "users", `${auth.currentUser.uid}`);
+    const docSnap = await (await getDoc(docRef)).data();
+
+    if (type === "increment") {
+      docSnap.cartItems.map((cartItem) => {
+        if (cartItem.id === item.id) {
+          setQuantity((prevState) => ({ ...prevState }));
+        }
+      });
+    }
+    if (type === "decrement") {
+      docSnap.cartItems.map((cartItem) => {
+        if (cartItem.id === item.id) {
+          setQuantity((prevQuantity) => prevQuantity - 1);
+        }
+      });
     }
   };
 
@@ -40,57 +93,65 @@ const Cart = () => {
       </div>
     );
   }
-  return (
-    <div>
-      <h1>Cart Items</h1>
-      <PageContainer>
-        <ItemsContainer>
-          {cartItems.map((item) => {
-            return (
-              <Item key={item.id}>
-                <img src={item.imageUrl} alt="" />
-                <div className="item-details">
-                  <p> {cartItemsCopy.quantity ? cartItemsCopy.quantity : 0} </p>
-                  <p>
-                    <FontAwesomeIcon icon={faTimes} />
-                  </p>
-                  <div className="details">
-                    <p className="item-name">{item.name}</p>
-                    <p className="item-price">{item.price} $</p>
+  if (!cartItems) {
+    return <h1>Loading...</h1>;
+  } else {
+    return (
+      <div>
+        <h1>Cart Items</h1>
+        <PageContainer>
+          <ItemsContainer>
+            {cartItems.map((item) => {
+              return (
+                <Item key={item.id}>
+                  <img src={item.imageUrl} alt="" />
+                  <div className="item-details">
+                    <p> {Object.keys(quantity).length === 0 ? 1 : 2} </p>
+                    <p>
+                      <FontAwesomeIcon icon={faTimes} />
+                    </p>
+                    <div className="details">
+                      <p className="item-name">{item.name}</p>
+                      <p className="item-price">{item.price} $</p>
+                    </div>
                   </div>
-                </div>
-                <div className="item-quantity">
-                  <button
-                    className="button-arrow"
-                    onClick={() => incrementQuantity(item)}
-                  >
-                    <FontAwesomeIcon icon={faAngleUp} />
-                  </button>
-                  <button className="button-delete">
-                    <FontAwesomeIcon icon={faTimesCircle} />
-                  </button>
-                  <button className="button-arrow">
-                    <FontAwesomeIcon icon={faAngleDown} />
-                  </button>
-                </div>
-              </Item>
-            );
-          })}
-        </ItemsContainer>
-        <TotalContainer>
-          <p className="total">
-            Total:
-            {cartItems.reduce((amount, item) => item.price + amount, 0)}$
-          </p>
-          <GoBackBtn>
-            <Link to="/checkout">
-              checkout <FontAwesomeIcon icon={faMoneyBill} />
-            </Link>
-          </GoBackBtn>
-        </TotalContainer>
-      </PageContainer>
-    </div>
-  );
+                  <div className="item-quantity">
+                    <button
+                      className="button-arrow"
+                      onClick={() => changeQuantity("increment", item)}
+                    >
+                      <FontAwesomeIcon icon={faAngleUp} />
+                    </button>
+                    <button className="button-delete">
+                      <FontAwesomeIcon icon={faTimesCircle} />
+                    </button>
+                    <button
+                      className="button-arrow"
+                      onClick={() => changeQuantity("decrement", item)}
+                      disabled={quantity === 0 ? true : false}
+                    >
+                      <FontAwesomeIcon icon={faAngleDown} />
+                    </button>
+                  </div>
+                </Item>
+              );
+            })}
+          </ItemsContainer>
+          <TotalContainer>
+            <p className="total">
+              Total:
+              {cartItems.reduce((amount, item) => item.price + amount, 0)}$
+            </p>
+            <GoBackBtn>
+              <Link to="/checkout">
+                checkout <FontAwesomeIcon icon={faMoneyBill} />
+              </Link>
+            </GoBackBtn>
+          </TotalContainer>
+        </PageContainer>
+      </div>
+    );
+  }
 };
 
 export default Cart;

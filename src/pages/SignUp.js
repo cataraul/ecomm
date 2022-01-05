@@ -12,7 +12,8 @@ import {
   faUser,
   faLock,
   faIdCard,
-  faRandom,
+  faAddressBook,
+  faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../styles/signin.scss";
@@ -25,9 +26,12 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
+    address: "",
+    phoneNumber: "",
+    cartItems: [],
   });
   //Destructuring from the form data the email and password
-  const { name, email, password } = formData;
+  const { name, email, password, address, phoneNumber } = formData;
   const onChangeHandler = (e) => {
     setFormData((prevState) => ({
       //Keeping The previous data that formData had
@@ -50,6 +54,8 @@ const SignUp = () => {
       const user = userCredential.user;
       updateProfile(auth.currentUser, {
         displayName: name,
+        phoneNumber: phoneNumber,
+        address: address,
       });
       // Copying form data and deleting the password so we dont put it in database
       const formDataCopy = { ...formData };
@@ -104,11 +110,34 @@ const SignUp = () => {
             onChange={onChangeHandler}
           />
         </div>
+        <div className="input-container">
+          <i>
+            <FontAwesomeIcon icon={faAddressBook} />
+          </i>
+          <input
+            type="text"
+            placeholder="Address..."
+            id="address"
+            value={address}
+            onChange={onChangeHandler}
+          />
+        </div>
+        <div className="input-container">
+          <i>
+            <FontAwesomeIcon icon={faPhone} />
+          </i>
+          <input
+            type="tel"
+            placeholder="Phone Number..."
+            id="phoneNumber"
+            value={phoneNumber}
+            onChange={onChangeHandler}
+          />
+        </div>
         <div className="buttons">
           <ButtonComponent className="button">Sign Up</ButtonComponent>
         </div>
       </form>
-      {/* Google OAuth */}
       <Link to="/sign-in" className="forgot-password sign-up">
         Sign In Instead
       </Link>

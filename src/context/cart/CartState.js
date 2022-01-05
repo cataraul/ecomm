@@ -5,7 +5,7 @@ import {
   SHOW_HIDE_CART,
   ADD_TO_CART,
   REMOVE_ITEM,
-  INCREASE_QUANTITY,
+  CHANGE_CART_QUANTITY,
 } from "../Types";
 
 const CartState = ({ children }) => {
@@ -27,8 +27,8 @@ const CartState = ({ children }) => {
   const removeItem = (id) => {
     dispatch({ type: REMOVE_ITEM, payload: id });
   };
-  const increaseQuantity = (id) => {
-    dispatch({ type: INCREASE_QUANTITY, payload: id });
+  const changeCartQuantity = (id) => {
+    dispatch({ type: CHANGE_CART_QUANTITY, payload: id });
   };
 
   return (
@@ -39,7 +39,7 @@ const CartState = ({ children }) => {
         addToCart,
         showHideCart,
         removeItem,
-        increaseQuantity,
+        changeCartQuantity,
       }}
     >
       {children}

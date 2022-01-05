@@ -2,7 +2,7 @@ import {
   SHOW_HIDE_CART,
   ADD_TO_CART,
   REMOVE_ITEM,
-  INCREASE_QUANTITY,
+  CHANGE_CART_QUANTITY,
 } from "../Types";
 
 const CartReducer = (state, action) => {
@@ -25,7 +25,12 @@ const CartReducer = (state, action) => {
         cartItems: state.cartItems.filter((item) => item.id !== action.payload),
       };
     }
-
+    // case CHANGE_CART_QUANTITY: {
+    //   return {
+    //     ...state,
+    //     cartItems:state.cartItems.map((item)=>{..cartItems,item.quantity++})
+    //   };
+    // }
     default:
       return state;
   }

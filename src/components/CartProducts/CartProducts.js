@@ -10,7 +10,7 @@ import ButtonComponent from "../Button/Button";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const CartProducts = () => {
+const CartProducts = ({ setCartVisibility }) => {
   // const { cartItems } = useContext(CartContext);
   const [cartItems, setCartItems] = useState([]);
   const auth = getAuth();
@@ -48,11 +48,26 @@ const CartProducts = () => {
       ) : (
         <h2>The cart it empty, add products!</h2>
       )}
-      <ButtonComponent className="checkout">
-        <Link to="/cart" className="ckeckout-link">
-          Go to Cart <FontAwesomeIcon icon={faShoppingCart} />
-        </Link>
-      </ButtonComponent>
+      <p className="total">
+        Total:
+        {cartItems.reduce(
+          (amount, item) => item.price * item.quantity + amount,
+          0
+        )}
+        $
+      </p>
+      {cartItems.length > 0 ? (
+        <ButtonComponent
+          className="checkout"
+          onClick={() => setCartVisibility((prevstate) => !prevstate)}
+        >
+          <Link to="/cart" className="ckeckout-link">
+            Go to Cart <FontAwesomeIcon icon={faShoppingCart} />
+          </Link>
+        </ButtonComponent>
+      ) : (
+        <></>
+      )}
     </CartProductsContainer>
   );
 };
@@ -61,7 +76,7 @@ export default CartProducts;
 
 const CartProductsContainer = styled.div`
   max-height: 20rem;
-  width: 20rem;
+  width: 22rem;
   border: 1px solid black;
   position: absolute;
   right: 3rem;
@@ -69,7 +84,7 @@ const CartProductsContainer = styled.div`
   margin-top: 1rem;
   background-color: #fefefe;
   z-index: 9999;
-  overflow: scroll;
+  overflow-y: scroll;
   h2 {
     text-align: center;
     padding: 1rem 0;
@@ -78,11 +93,16 @@ const CartProductsContainer = styled.div`
     position: relative;
     bottom: 0;
     left: 25%;
-
+    margin: 0.5rem 0;
     &:hover {
       a {
         color: #fefefe;
       }
     }
+  }
+  .total {
+    margin: 0.5rem 0;
+    font-size: 1.4rem;
+    text-align: center;
   }
 `;

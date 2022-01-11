@@ -15,19 +15,25 @@
   }
 
   .list {
-    width: 50%;
+    width: 25%;
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-around;
 
     .list-item {
       padding: 0.625rem 1rem;
+      font-size: 1.3rem;
+      font-weight: 400;
       text-transform: uppercase;
+      &:hover {
+        border-bottom: 1px solid gray;
+      }
     }
     .show-cart-items {
       background: none;
       border: none;
+      font-size: 1.3rem;
       &:hover {
         cursor: pointer;
       }

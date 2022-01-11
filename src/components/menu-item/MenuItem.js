@@ -6,7 +6,7 @@ const MenuItem = ({ title, imageUrl, size }) => {
   return (
     <div className={`${size} menu-item`}>
       <Link
-        to="/shop"
+        to={`/${title}`}
         style={{ textDecoration: "none" }}
         className={`${size} menu-item`}
       >

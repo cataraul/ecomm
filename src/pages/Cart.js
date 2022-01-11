@@ -1,13 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { db } from "../firebase.config";
-import {
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  increment,
-  collection,
-} from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import CartContext from "../context/cart/CartContext";
 import { Link } from "react-router-dom";
@@ -20,13 +13,13 @@ import {
   faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isFocusable } from "@testing-library/user-event/dist/utils";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   // const { cartItems } = useContext(CartContext);
-  const [cartItemsCopy, setCartItemsCopy] = useState({});
+  const [cartItemsCopy, setCartItemsCopy] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [quantity, setQuantity] = useState({});
   //CHECK IF USER IS LOGGED IN, IF IT IS AND IT HAS ITEMS IN THE CART, DISPLAY THEM
 
   const auth = getAuth();
@@ -37,7 +30,6 @@ const Cart = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         getData();
-      } else {
       }
     });
   };
@@ -47,6 +39,7 @@ const Cart = () => {
 
     if (docSnap.exists()) {
       setCartItems([...docSnap.data().cartItems]);
+      setCartItemsCopy([...docSnap.data().cartItems]);
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
@@ -57,22 +50,59 @@ const Cart = () => {
 
   const changeQuantity = async (type, item) => {
     const docRef = doc(db, "users", `${auth.currentUser.uid}`);
-    const docSnap = await (await getDoc(docRef)).data();
+    const docSnap = await (await getDoc(docRef)).data().cartItems;
+    if (docSnap) {
+      if (cartItemsCopy.length > 0) {
+        cartItemsCopy.map((cartItem) => {
+          if (cartItem.name === item.name) {
+            if (type === "increment") {
+              if (cartItem.quantity >= 3) {
+                toast.warn(
+                  "We're sorry but you can't add more than 3 items of the same type.",
+                  {
+                    position: "top-center",
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: false,
+                  }
+                );
+              } else {
+                cartItem.quantity++;
+                setItemToFirestore();
+              }
+            }
+            if (type === "decrement") {
+              cartItem.quantity--;
+              setItemToFirestore();
+            }
+          }
+        });
+      }
+    }
+  };
+  const setItemToFirestore = async () => {
+    await updateDoc(doc(db, "users", `${auth.currentUser.uid}`), {
+      cartItems: deleteField(),
+    });
 
-    if (type === "increment") {
-      docSnap.cartItems.map((cartItem) => {
-        if (cartItem.id === item.id) {
-          setQuantity((prevState) => ({ ...prevState }));
-        }
-      });
-    }
-    if (type === "decrement") {
-      docSnap.cartItems.map((cartItem) => {
-        if (cartItem.id === item.id) {
-          setQuantity((prevQuantity) => prevQuantity - 1);
-        }
-      });
-    }
+    await updateDoc(doc(db, "users", `${auth.currentUser.uid}`), {
+      cartItems: [...cartItemsCopy],
+    });
+
+    getData();
+  };
+  const deleteItemFirestore = async (item) => {
+    await updateDoc(doc(db, "users", `${auth.currentUser.uid}`), {
+      cartItems: deleteField(),
+    });
+
+    let filteredArray = cartItems.filter((copyItem) => copyItem.id !== item.id);
+    setCartItems([...filteredArray]);
+
+    await updateDoc(doc(db, "users", `${auth.currentUser.uid}`), {
+      cartItems: [...filteredArray],
+    });
   };
 
   if (cartItems.length === 0) {
@@ -106,7 +136,7 @@ const Cart = () => {
                 <Item key={item.id}>
                   <img src={item.imageUrl} alt="" />
                   <div className="item-details">
-                    <p> {Object.keys(quantity).length === 0 ? 1 : 2} </p>
+                    <p> {item.quantity} </p>
                     <p>
                       <FontAwesomeIcon icon={faTimes} />
                     </p>
@@ -122,13 +152,16 @@ const Cart = () => {
                     >
                       <FontAwesomeIcon icon={faAngleUp} />
                     </button>
-                    <button className="button-delete">
+                    <button
+                      className="button-delete"
+                      onClick={() => deleteItemFirestore(item)}
+                    >
                       <FontAwesomeIcon icon={faTimesCircle} />
                     </button>
                     <button
                       className="button-arrow"
                       onClick={() => changeQuantity("decrement", item)}
-                      disabled={quantity === 0 ? true : false}
+                      disabled={item.quantity <= 1 ? true : false}
                     >
                       <FontAwesomeIcon icon={faAngleDown} />
                     </button>
@@ -140,7 +173,11 @@ const Cart = () => {
           <TotalContainer>
             <p className="total">
               Total:
-              {cartItems.reduce((amount, item) => item.price + amount, 0)}$
+              {cartItems.reduce(
+                (amount, item) => item.price * item.quantity + amount,
+                0
+              )}
+              $
             </p>
             <GoBackBtn>
               <Link to="/checkout">

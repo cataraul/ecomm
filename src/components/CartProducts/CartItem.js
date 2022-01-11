@@ -2,14 +2,11 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 const CartItem = ({ item }) => {
-  const [quantity, setQuantity] = useState(item.quantity);
-
   return (
     <ProductContainer>
       <img src={item.imageUrl} alt={item.name} />
       <div className="product-details">
-        <p>{item.name}</p>
-        <p>{item.price}$</p>
+        <p>{`${item.quantity} ${item.name} x ${item.price}$`}</p>
       </div>
     </ProductContainer>
   );
@@ -23,6 +20,7 @@ const ProductContainer = styled.div`
   display: flex;
   padding: 0.2rem;
   margin: 0.4rem 0;
+  border-radius: 0.1rem;
   img {
     height: 4.2rem;
     width: 20%;

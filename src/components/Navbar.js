@@ -26,7 +26,11 @@ const Navbar = () => {
           >
             <FontAwesomeIcon icon={faShoppingCart}></FontAwesomeIcon>
           </button>
-          {cartVisibility ? <CartProducts /> : <></>}
+          {cartVisibility ? (
+            <CartProducts setCartVisibility={setCartVisibility} />
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>

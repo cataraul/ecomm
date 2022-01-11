@@ -5,6 +5,7 @@ import "../styles/profile.scss";
 import ButtonComponent from "../components/Button/Button";
 import { db } from "../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
+import styled from "styled-components";
 const Profile = () => {
   const auth = getAuth();
   const navigate = useNavigate();
@@ -17,19 +18,10 @@ const Profile = () => {
     email: auth.currentUser.email,
     address: auth.currentUser.address,
     phoneNumber: auth.currentUser.phoneNumber,
+    zipcode: auth.currentUser.zipcode,
+    city: auth.currentUser.city,
   });
   const getData = async () => {
-    // const q = query(collection(db, "users")) ;
-
-    // const querySnapshot = await getDocs(q);
-    // querySnapshot.forEach((doc) => {
-    //   // doc.data() is never undefined for query doc snapshots
-    //   console.log(doc.id, " => ", doc.data());
-    //   if (doc.id === auth.currentUser.uid) {
-    //     console.log(true);
-    //   }
-    // });
-
     const docRef = doc(db, "users", `${auth.currentUser.uid}`);
     const docSnap = await getDoc(docRef);
 
@@ -56,13 +48,39 @@ const Profile = () => {
         </ButtonComponent>
       </header>
       <main>
-        Name: <h2>{formData.name}</h2>
-        Email: <h2>{formData.email}</h2>
-        Address: <h2>{formData.address}</h2>
-        Phone Number: <h2>{formData.phoneNumber}</h2>
+        <UserData>
+          <span>Name - </span>
+          {formData.name}
+        </UserData>
+        <UserData>
+          <span>Email - </span> {formData.email}
+        </UserData>
+        <UserData>
+          <span>Address - </span> {formData.address}
+        </UserData>
+        <UserData>
+          <span>City - </span> {formData.city}
+        </UserData>
+        <UserData>
+          <span>Zipcode - </span>
+          {formData.zipcode}
+        </UserData>
+        <UserData>
+          <span>Phone Number - </span>
+          {formData.phoneNumber}
+        </UserData>
       </main>
     </div>
   );
 };
 
 export default Profile;
+
+const UserData = styled.p`
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 1rem 0;
+  span {
+    font-size: 1.3rem;
+  }
+`;

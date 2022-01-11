@@ -14,6 +14,8 @@ import {
   faIdCard,
   faAddressBook,
   faPhone,
+  faMapPin,
+  faCity,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../styles/signin.scss";
@@ -28,10 +30,13 @@ const SignUp = () => {
     password: "",
     address: "",
     phoneNumber: "",
+    city: "",
+    zipcode: "",
     cartItems: [],
   });
   //Destructuring from the form data the email and password
-  const { name, email, password, address, phoneNumber } = formData;
+  const { name, email, password, address, phoneNumber, city, zipcode } =
+    formData;
   const onChangeHandler = (e) => {
     setFormData((prevState) => ({
       //Keeping The previous data that formData had
@@ -56,6 +61,8 @@ const SignUp = () => {
         displayName: name,
         phoneNumber: phoneNumber,
         address: address,
+        city: city,
+        zipcode: zipcode,
       });
       // Copying form data and deleting the password so we dont put it in database
       const formDataCopy = { ...formData };
@@ -80,7 +87,7 @@ const SignUp = () => {
           </i>
           <input
             type="text"
-            placeholder="Name..."
+            placeholder="Full Name..."
             id="name"
             value={name}
             onChange={onChangeHandler}
@@ -119,6 +126,30 @@ const SignUp = () => {
             placeholder="Address..."
             id="address"
             value={address}
+            onChange={onChangeHandler}
+          />
+        </div>
+        <div className="input-container">
+          <i>
+            <FontAwesomeIcon icon={faCity} />
+          </i>
+          <input
+            type="text"
+            placeholder="City..."
+            id="city"
+            value={city}
+            onChange={onChangeHandler}
+          />
+        </div>
+        <div className="input-container">
+          <i>
+            <FontAwesomeIcon icon={faMapPin} />
+          </i>
+          <input
+            type="text"
+            placeholder="Zipcode..."
+            id="zipcode"
+            value={zipcode}
             onChange={onChangeHandler}
           />
         </div>

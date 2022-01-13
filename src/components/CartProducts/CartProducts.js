@@ -68,14 +68,14 @@ const CartProducts = ({ setCartVisibility }) => {
         $
       </p>
       {cartItems.length > 0 ? (
-        <ButtonComponent
-          className="checkout"
-          onClick={() => setCartVisibility((prevstate) => !prevstate)}
-        >
-          <Link to="/cart" className="ckeckout-link">
+        <Link to="/cart" className="ckeckout-link">
+          <ButtonComponent
+            className="checkout"
+            onClick={() => setCartVisibility((prevstate) => !prevstate)}
+          >
             Go to Cart <FontAwesomeIcon icon={faShoppingCart} />
-          </Link>
-        </ButtonComponent>
+          </ButtonComponent>
+        </Link>
       ) : (
         <></>
       )}

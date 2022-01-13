@@ -103,7 +103,6 @@ const SignIn = () => {
           <ButtonComponent>Sign In</ButtonComponent>
         </div>
       </form>
-      {/* Google OAuth */}
       <Link to="/forgot-password" className="forgot-password">
         Forgot password
       </Link>

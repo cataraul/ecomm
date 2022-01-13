@@ -6,8 +6,8 @@ const SHOP_DATA = [
     items: [
       {
         id: 1,
-        name: "Brown Brim",
-        imageUrl: "https://i.ibb.co/ZYW3VTp/brown-brim.png",
+        name: "Ice Cream Cap",
+        imageUrl: "https://i.ibb.co/VQMmLyk/icecream-themed-cap.jpg",
         price: 25,
         quantity: 1,
       },
@@ -146,9 +146,10 @@ const SHOP_DATA = [
       },
       {
         id: 19,
-        name: "Blue Jean Jacket",
-        imageUrl: "https://i.ibb.co/mJS6vz0/blue-jean-jacket.png",
-        price: 90,
+        name: "Leather Jacket",
+        imageUrl:
+          "https://i.ibb.co/wRKRvK6/lea-ochel-ns-RBb-E6-YLs-unsplash.jpg",
+        price: 150,
         quantity: 1,
       },
       {
@@ -182,7 +183,7 @@ const SHOP_DATA = [
       {
         id: 23,
         name: "Blue Tanktop",
-        imageUrl: "https://i.ibb.co/7CQVJNm/blue-tank.png",
+        imageUrl: "https://i.ibb.co/1spBDfP/blue-tank-top.jpg",
         price: 25,
         quantity: 1,
       },
@@ -245,8 +246,8 @@ const SHOP_DATA = [
       {
         id: 31,
         name: "Floral T-shirt",
-        imageUrl: "https://i.ibb.co/qMQ75QZ/floral-shirt.png",
-        price: 20,
+        imageUrl: "https://i.ibb.co/xhGTS26/floraal-shirt.jpg",
+        price: 30,
         quantity: 1,
       },
       {
@@ -259,7 +260,7 @@ const SHOP_DATA = [
       {
         id: 33,
         name: "Pink T-shirt",
-        imageUrl: "https://i.ibb.co/RvwnBL8/pink-shirt.png",
+        imageUrl: "https://i.ibb.co/ZMvMzXg/pink-t-shirt.jpg",
         price: 25,
         quantity: 1,
       },
@@ -286,11 +287,12 @@ const SHOP_DATA = [
     items: [
       {
         id: 35,
-        name: "Silver Dragon Bracelet",
-        imageUrl: "https://i.ibb.co/DK2qXRt/bracelet.jpg",
-        price: 695,
+        name: "Engagement Ring",
+        imageUrl: "https://i.ibb.co/Jcg7LTj/Engagement-Ring.jpg",
+        price: 200,
         quantity: 1,
       },
+
       {
         id: 36,
         name: "Solid Gold Petite Micropave",
@@ -310,6 +312,41 @@ const SHOP_DATA = [
         name: "Prierced Owl Rose Gold ",
         imageUrl: "https://i.ibb.co/Fb4v6XJ/owl-rose-gold.jpg",
         price: 10.99,
+        quantity: 1,
+      },
+      {
+        id: 39,
+        name: "Silver Ring ",
+        imageUrl: "https://i.ibb.co/znvrBtc/silver-ring.jpg",
+        price: 20.99,
+        quantity: 1,
+      },
+      {
+        id: 40,
+        name: "Rose Silver Rings ",
+        imageUrl: "https://i.ibb.co/jD9Y0Yw/Rose-Silver-Rings.jpg",
+        price: 50.99,
+        quantity: 1,
+      },
+      {
+        id: 41,
+        name: "Diamonds Ring ",
+        imageUrl: "https://i.ibb.co/j4dKcx1/Diamond-ring.jpg",
+        price: 150.99,
+        quantity: 1,
+      },
+      {
+        id: 42,
+        name: "Diamond Heart Ring ",
+        imageUrl: "https://i.ibb.co/jfHn9h1/Diamond-Heart-Ring.jpg",
+        price: 150.99,
+        quantity: 1,
+      },
+      {
+        id: 43,
+        name: "Silver Dragon Bracelet",
+        imageUrl: "https://i.ibb.co/DK2qXRt/bracelet.jpg",
+        price: 695,
         quantity: 1,
       },
     ],

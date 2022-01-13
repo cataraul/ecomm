@@ -206,11 +206,11 @@ const Cart = () => {
               )}
               $
             </p>
-            <GoBackBtn>
-              <Link to="/checkout">
+            <Link to="/checkout">
+              <GoBackBtn>
                 checkout <FontAwesomeIcon icon={faMoneyBill} />
-              </Link>
-            </GoBackBtn>
+              </GoBackBtn>
+            </Link>
           </TotalContainer>
         </PageContainer>
       </div>

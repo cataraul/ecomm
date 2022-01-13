@@ -12,6 +12,8 @@ import Shop from "./pages/Shop";
 import Items from "./pages/Items";
 import ForgotPassword from "./pages/ForgotPassword";
 import Navbar from "./components/Navbar";
+import EditProfileData from "./pages/EditProfileData";
+import EditEmail from "./pages/EditEmail";
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/edit-email" element={<EditEmail />} />
+        <Route path="/update-profile" element={<EditProfileData />} />
         <Route path="/checkout" element={<Checkout />} />
       </Routes>
       <ToastContainer />

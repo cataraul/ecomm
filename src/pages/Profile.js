@@ -5,6 +5,7 @@ import "../styles/profile.scss";
 import ButtonComponent from "../components/Button/Button";
 import { db } from "../firebase.config";
 import { doc, getDoc } from "firebase/firestore";
+import { Link } from "react-router-dom";
 import {
   faUser,
   faLock,
@@ -61,26 +62,23 @@ const Profile = () => {
     <div className="profile">
       <header className="profileHeader">
         <p className="pageHeader">My Profile</p>
-        <ButtonComponent
-          type="button"
-          className="logOut"
-          onClick={() => onLogout()}
-        >
-          Logout
-        </ButtonComponent>
+        <div className="buttons">
+          <Link to="/edit-email">
+            <ButtonComponent style={{ marginRight: "0.5rem" }}>
+              Change Email
+            </ButtonComponent>
+          </Link>
+
+          <ButtonComponent
+            type="button"
+            className="logOut"
+            onClick={() => onLogout()}
+          >
+            Logout
+          </ButtonComponent>
+        </div>
       </header>
       <main>
-        <div className="user-data-container" style={{ display: "flex" }}>
-          <UserData>
-            <FontAwesomeIcon
-              icon={faUser}
-              style={{ fontSize: "1rem", marginRight: "0.5rem" }}
-            />{" "}
-            Name - <span></span>
-            {formData.name}
-          </UserData>
-          <button>Update Name</button>
-        </div>
         <UserData>
           <span>
             <FontAwesomeIcon
@@ -91,46 +89,61 @@ const Profile = () => {
           </span>{" "}
           {formData.email}
         </UserData>
-        <UserData>
-          <span>
+        <UserDataContainer>
+          <UserData>
             <FontAwesomeIcon
-              icon={faAddressBook}
+              icon={faUser}
               style={{ fontSize: "1rem", marginRight: "0.5rem" }}
             />{" "}
-            Address -{" "}
-          </span>{" "}
-          {formData.address}
-        </UserData>
-        <UserData>
-          <span>
-            <FontAwesomeIcon
-              icon={faCity}
-              style={{ fontSize: "1rem", marginRight: "0.5rem" }}
-            />{" "}
-            City -{" "}
-          </span>{" "}
-          {formData.city}
-        </UserData>
-        <UserData>
-          <span>
-            <FontAwesomeIcon
-              icon={faMapPin}
-              style={{ fontSize: "1rem", marginRight: "0.5rem" }}
-            />{" "}
-            Zipcode -{" "}
-          </span>
-          {formData.zipcode}
-        </UserData>
-        <UserData>
-          <span>
+            Name - <span></span>
+            {formData.name}
+          </UserData>
+          <UserData>
+            <span>
+              <FontAwesomeIcon
+                icon={faCity}
+                style={{ fontSize: "1rem", marginRight: "0.5rem" }}
+              />{" "}
+              City -{" "}
+            </span>{" "}
+            {formData.city}
+          </UserData>
+          <UserData>
+            <span>
+              <FontAwesomeIcon
+                icon={faAddressBook}
+                style={{ fontSize: "1rem", marginRight: "0.5rem" }}
+              />{" "}
+              Address -{" "}
+            </span>{" "}
+            {formData.address}
+          </UserData>
+
+          <UserData>
+            <span>
+              <FontAwesomeIcon
+                icon={faMapPin}
+                style={{ fontSize: "1rem", marginRight: "0.5rem" }}
+              />{" "}
+              Zipcode -{" "}
+            </span>
+            {formData.zipcode}
+          </UserData>
+          <UserData>
             <FontAwesomeIcon
               icon={faPhone}
-              style={{ fontSize: "1rem", marginRight: "0.5rem" }}
+              style={{
+                fontSize: "1rem",
+                marginRight: "0.5rem",
+              }}
             />{" "}
-            Phone Number -{" "}
-          </span>
-          {formData.phoneNumber}
-        </UserData>
+            <span>Phone Number - </span>
+            {formData.phoneNumber}
+          </UserData>
+          <Link to="/update-profile">
+            <ButtonComponent>Edit Profile Data</ButtonComponent>
+          </Link>
+        </UserDataContainer>
       </main>
     </div>
   );
@@ -139,13 +152,19 @@ const Profile = () => {
 export default Profile;
 
 const UserData = styled.p`
+  border: 1px solid black;
   font-size: 1.6rem;
   font-weight: 600;
   padding-bottom: 0.25rem;
   width: 20rem;
   margin: 1rem 0;
+
   span {
     font-size: 1.3rem;
     padding: 0 0.25rem;
   }
+`;
+const UserDataContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

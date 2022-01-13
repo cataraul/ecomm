@@ -176,4 +176,7 @@ const ItemsContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   row-gap: 1rem;
+  @media only screen and (max-width: 890px) {
+    justify-content: center;
+  }
 `;

@@ -11,17 +11,28 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CartProducts = ({ setCartVisibility }) => {
-  // const { cartItems } = useContext(CartContext);
+  const { cartItemsContext } = useContext(CartContext);
   const [cartItems, setCartItems] = useState([]);
   const auth = getAuth();
   useEffect(() => {
     checkUser();
+    return () => {
+      setCartItems([]);
+    };
   }, []);
   const checkUser = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         getData();
       } else {
+        let cartItemsLocal = JSON.parse(
+          localStorage.getItem("cartItemsContext")
+        );
+        if (cartItemsLocal.length > 0) {
+          setCartItems([...cartItemsLocal]);
+        } else {
+          setCartItems([...cartItemsContext]);
+        }
       }
     });
   };
@@ -104,5 +115,16 @@ const CartProductsContainer = styled.div`
     margin: 0.5rem 0;
     font-size: 1.4rem;
     text-align: center;
+  }
+  @media only screen and (max-width: 450px) {
+    right: 1rem;
+  }
+  @media only screen and (max-width: 380px) {
+    right: 0.5rem;
+    width: 17rem;
+  }
+  @media only screen and (max-width: 290px) {
+    right: 0.255rem;
+    width: 15rem;
   }
 `;

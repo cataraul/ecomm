@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { db } from "../firebase.config";
 import {
   doc,
@@ -22,15 +22,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
+import CartContext from "../context/cart/CartContext";
 
 const Checkout = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState({});
+  const { cartItemsContext } = useContext(CartContext);
+
   const navigate = useNavigate();
   const auth = getAuth();
   useEffect(() => {
     checkUser();
+    return false;
   }, []);
   const checkUser = () => {
     onAuthStateChanged(auth, (user) => {
@@ -38,6 +42,9 @@ const Checkout = () => {
         setIsLoggedIn(true);
         getData();
       } else {
+        navigate("/sign-in");
+        setCartItems([...cartItemsContext]);
+        toast.warn("You must log in or create an account before you continue.");
       }
     });
   };
@@ -56,6 +63,8 @@ const Checkout = () => {
     await updateDoc(doc(db, "users", `${auth.currentUser.uid}`), {
       cartItems: [],
     });
+    let emptyArr = [];
+    localStorage.setItem("cartItemsContext", JSON.stringify(emptyArr));
   };
   const paymentHandler = (e) => {
     removeData();
@@ -104,13 +113,16 @@ const Checkout = () => {
             Name : <span>{userData.name}</span>
           </p>
           <p className="user-info">
+            Email : <span>{userData.email}</span>
+          </p>
+          <p className="user-info">
             Address : <span>{userData.address}</span>
           </p>
           <p className="user-info">
-            Phone Number : <span>{userData.phoneNumber}</span>
+            City : <span>{userData.city}</span>
           </p>
           <p className="user-info">
-            Email : <span>{userData.email}</span>
+            Phone Number : <span>{userData.phoneNumber}</span>
           </p>
         </div>
         <div className="information">
@@ -136,7 +148,29 @@ const Checkout = () => {
       </CheckoutInformation>
     </CheckoutContainer>
   ) : (
-    <CheckoutForm />
+    <>
+      <CheckoutForm />
+      <div className="items">
+        <h2 style={{ textAlign: "center" }}>Bag Summary</h2>
+        {cartItems.map((item) => {
+          return (
+            <Item key={item.id}>
+              <img src={item.imageUrl} alt="" />
+              <div className="item-details">
+                <p> {item.quantity} </p>
+                <p>
+                  <FontAwesomeIcon icon={faTimes} />
+                </p>
+                <div className="details">
+                  <p className="item-name">{item.name}</p>
+                  <p className="item-price">{item.price} $</p>
+                </div>
+              </div>
+            </Item>
+          );
+        })}
+      </div>
+    </>
   );
 };
 
@@ -147,39 +181,19 @@ const CheckoutContainer = styled.section`
   height: 100%;
   display: flex;
   .items {
-    width: 35%;
+    width: 70%;
     padding: 0.4rem;
   }
-`;
-
-const Item = styled.div`
-  border: 1px solid gray;
-  height: 15rem;
-  display: flex;
-  width: 100%;
-  margin: 0.5rem;
-  img {
-    height: 100%;
-    width: 25%;
-  }
-  .item-details {
-    width: 50%;
-    display: flex;
+  @media only screen and (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    .details {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-
-    .item-name {
-      font-size: 2rem;
-    }
-    .item-price {
-      font-size: 1.5rem;
+  }
+  @media only screen and (max-width: 800px) {
+    .items {
+      width: 100%;
+      padding: 0;
+      margin: auto 0;
     }
   }
 `;
@@ -210,5 +224,104 @@ const CheckoutInformation = styled.div`
     padding: 1rem;
     margin: 1rem 0;
     border-radius: 0.4rem;
+  }
+  @media only screen and (max-width: 800px) {
+    width: 100%;
+    .details {
+      width: 100%;
+    }
+    .information {
+      width: 100%;
+    }
+  }
+`;
+const Item = styled.div`
+  border: 1px solid gray;
+  height: 15rem;
+  display: flex;
+  width: 100%;
+  margin: 0.5rem;
+  img {
+    height: 100%;
+    width: 25%;
+  }
+  .item-details {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .details {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .item-name {
+      font-size: 2rem;
+    }
+    .item-price {
+      font-size: 1.5rem;
+    }
+  }
+  @media only screen and (max-width: 1024px) {
+    justify-content: space-between;
+    img {
+      width: 30%;
+    }
+    .item-details {
+      width: 40%;
+    }
+    .item-quantity {
+      width: 10%;
+      padding-right: 1.5rem;
+    }
+  }
+  @media only screen and (max-width: 800px) {
+    width: 100%;
+    img {
+      width: 30%;
+    }
+    .item-details {
+      width: 40%;
+    }
+    .item-quantity {
+      width: 10%;
+      padding-right: 1.5rem;
+    }
+  }
+  @media only screen and (max-width: 545px) {
+    height: 15rem;
+    .details {
+      .item-name {
+        font-size: 1.5rem;
+      }
+      .item-price {
+        font-size: 1.2rem;
+      }
+    }
+  }
+  @media only screen and (max-width: 425px) {
+    flex-direction: column;
+    min-height: 20rem;
+    align-items: center;
+    img {
+      padding-top: 1rem;
+      height: 50%;
+      text-align: center;
+    }
+    .item-details {
+      width: 80%;
+      flex-direction: row;
+      justify-content: space-around;
+    }
+    .item-quantity {
+      width: 50%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0;
+    }
   }
 `;

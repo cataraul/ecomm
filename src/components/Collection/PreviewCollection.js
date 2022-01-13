@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../../firebase.config";
@@ -6,14 +6,23 @@ import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 import "../../styles/collection.scss";
 import CollectionItem from "./CollectionItem";
 import { toast } from "react-toastify";
+import CartContext from "../../context/cart/CartContext";
 
 const PreviewCollection = ({ title, items }) => {
+  const { addToCart, cartItemsContext, setItemLocalStorage } =
+    useContext(CartContext);
   const [cartItems, setCartItems] = useState([]);
   const [cartItemsCopy, setCartItemsCopy] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const auth = getAuth();
   useEffect(() => {
     checkUser();
+    return () => {
+      setIsLoggedIn(false);
+      setCartItems([]);
+      setCartItemsCopy([]);
+    };
   }, []);
   const checkUser = () => {
     onAuthStateChanged(auth, (user) => {
@@ -32,11 +41,37 @@ const PreviewCollection = ({ title, items }) => {
   };
 
   const checkIfItemExists = (item) => {
-    if (cartItems.some((cartItem) => cartItem.name === item.name)) {
-      updateItemQuantity(item);
+    if (isLoggedIn) {
+      if (cartItems.some((cartItem) => cartItem.name === item.name)) {
+        updateItemQuantity(item);
+      } else {
+        toast.success("Item added to cart!", { autoClose: 3000 });
+        console.log("Its Here");
+        getData(item);
+      }
     } else {
-      toast.success("Item added to cart!");
-      getData(item);
+      console.log("its also here");
+      if (cartItemsContext.some((cartItem) => cartItem.name === item.name)) {
+        cartItemsContext.map((cartItem) => {
+          if (cartItem.name === item.name) {
+            if (cartItem.quantity >= 3) {
+              toast.warn("You can't add more than 3 times the same product.", {
+                autoClose: 3000,
+              });
+            } else {
+              toast.success("Items quantity increased", {
+                position: "top-center",
+                autoClose: 3000,
+              });
+              cartItem.quantity++;
+            }
+          }
+        });
+      } else {
+        toast.success("Item added to cart!", { autoClose: 3000 });
+        addToCart(item);
+        setItemLocalStorage(item);
+      }
     }
   };
   const setItemToFirestore = async () => {

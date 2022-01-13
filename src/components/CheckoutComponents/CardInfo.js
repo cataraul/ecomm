@@ -75,7 +75,9 @@ const CardInfo = ({ paymentHandler }) => {
             />
           </div>
         </div>
-        <Button type="submit">Pay</Button>
+        <Button type="submit" style={{ width: "100%" }}>
+          Pay
+        </Button>
       </form>
       <p style={{ marginTop: "1rem" }}>
         <FontAwesomeIcon icon={faExclamationTriangle} />
@@ -95,6 +97,7 @@ const CardInfoContainer = styled.div`
   align-items: center;
   padding: 1rem;
   width: 30rem;
+
   form {
     display: flex;
     flex-direction: column;
@@ -123,6 +126,41 @@ const CardInfoContainer = styled.div`
       border-radius: 0.4rem;
       &:hover {
         cursor: pointer;
+      }
+    }
+  }
+  @media only screen and (max-width: 500px) {
+    width: 20rem;
+    form {
+      width: 18rem;
+      select {
+        margin: 0.2rem 0;
+      }
+      .expiration-container {
+        width: 5rem;
+        input {
+          width: 5rem;
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 330px) {
+    width: 15rem;
+    form {
+      width: 14rem;
+      select {
+        margin: 0.2rem 0;
+        width: 8rem;
+      }
+      .expiration-date {
+        flex-direction: column;
+        align-items: center;
+      }
+      .expiration-container {
+        width: 8rem;
+        input {
+          width: 8rem;
+        }
       }
     }
   }

@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import {
   faUser,
@@ -45,12 +45,12 @@ const SignUp = () => {
       [e.target.id]: e.target.value,
     }));
   };
+  const auth = getAuth();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
     try {
-      const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -71,8 +71,27 @@ const SignUp = () => {
       await setDoc(doc(db, "users", user.uid), formDataCopy);
 
       navigate("/");
+      checkItems();
     } catch (err) {
       toast.error("Something went wrong with registration");
+    }
+  };
+  const checkItems = async () => {
+    const docRef = doc(db, "users", `${auth.currentUser.uid}`);
+    const docSnap = await getDoc(docRef);
+    let cartItemsRef = [...docSnap.data().cartItems];
+    let cartItemsLocal = JSON.parse(localStorage.getItem("cartItemsContext"));
+
+    if (docSnap.exists()) {
+      if (cartItemsRef.length > 0) {
+        return;
+      } else if (cartItemsRef.length <= 0 && cartItemsLocal.length > 0) {
+        await updateDoc(doc(db, "users", `${auth.currentUser.uid}`), {
+          cartItems: [...cartItemsLocal],
+        });
+      } else if (cartItemsRef.length <= 0 && cartItemsLocal.length <= 0) {
+        return;
+      }
     }
   };
 

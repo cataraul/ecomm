@@ -1,4 +1,7 @@
 .profile {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   .profileHeader {
     width: 100%;
     display: flex;

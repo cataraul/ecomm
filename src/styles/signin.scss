@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  border-radius: 0.4rem;
   form {
     width: 100%;
     display: flex;
@@ -31,6 +32,12 @@
     &:focus {
       outline: none;
     }
+  }
+  @media only screen and (max-width: 930px) {
+    width: 50%;
+  }
+  @media only screen and (max-width: 400px) {
+    width: 70%;
   }
 }
 

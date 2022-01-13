@@ -28,6 +28,7 @@ const PreviewCollection = ({ title, items }) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         fetchData();
+        setIsLoggedIn(true);
       }
     });
   };
@@ -46,11 +47,9 @@ const PreviewCollection = ({ title, items }) => {
         updateItemQuantity(item);
       } else {
         toast.success("Item added to cart!", { autoClose: 3000 });
-        console.log("Its Here");
         getData(item);
       }
     } else {
-      console.log("its also here");
       if (cartItemsContext.some((cartItem) => cartItem.name === item.name)) {
         cartItemsContext.map((cartItem) => {
           if (cartItem.name === item.name) {
